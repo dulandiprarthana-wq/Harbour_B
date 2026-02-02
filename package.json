@@ -8,6 +8,7 @@
     "dev": "nodemon src/server.js"
   },
   "repository": {
+    "start": "node src/server.js",
     "type": "git",
     "url": "git+https://github.com/VimukthiPramudantha/Harbor_lines_backend.git"
   },

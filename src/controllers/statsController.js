@@ -64,3 +64,62 @@ export const getDashboardStats = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
+export const getCanadaDashboardStats = async (req, res) => {
+  try {
+    const manifests = await CanadaHBL.find().lean();
+    
+    // Calculate totals
+    const totalBookings = await CanadaHBL.countDocuments(); // Count of Manifests
+    let totalPackages = 0;
+    let totalHBLs = 0;
+    
+    manifests.forEach(m => {
+      if (m.hbls && Array.isArray(m.hbls)) {
+        totalHBLs += m.hbls.length; // Count of HBLs
+        m.hbls.forEach(h => {
+          if (h.references && Array.isArray(h.references)) {
+            h.references.forEach(ref => {
+              totalPackages += Number(ref.noOfPackages) || 0; // Count of Packages
+            });
+          }
+        });
+      }
+    });
+
+    const recentManifests = await CanadaHBL.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .lean();
+
+    const recentBookings = [];
+    recentManifests.forEach(m => {
+      if (m.hbls && Array.isArray(m.hbls)) {
+        m.hbls.forEach(h => {
+          recentBookings.push({
+            id: m._id,
+            masterBL: h.jobNum,
+            bookingNum: h.bookingNum,
+            vessel: h.vessel,
+            etd: h.etd, // Mapped to ETD
+            createdAt: m.createdAt
+          });
+        });
+      }
+    });
+
+    res.json({
+      success: true,
+      data: {
+        summary: {
+          totalBookings, // Total Manifests
+          totalPackages, // Replaces Total Weight
+          totalHBLs // Replaces Total CBM
+        },
+        recentBookings: recentBookings.slice(0, 5)
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};

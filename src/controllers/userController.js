@@ -3,7 +3,7 @@ import User from '../models/User.js';
 
 export const createUser = async (req, res) => {
   try {
-    const { code, username, password } = req.body;
+    const { code, username, password, role } = req.body;
 
     const trimmedCode = code?.trim().toUpperCase();
     const trimmedUsername = username?.trim();
@@ -29,7 +29,7 @@ export const createUser = async (req, res) => {
       code: trimmedCode,
       username: trimmedUsername,
       password: trimmedPassword,
-      role: 'Admin'
+      role: role || 'Admin'
     });
 
     res.status(201).json({
@@ -64,7 +64,7 @@ export const getAllUsers = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, isActive } = req.body;
+    const { username, isActive, role } = req.body;
 
     const trimmedUsername = username?.trim();
 
@@ -82,7 +82,7 @@ export const updateUser = async (req, res) => {
 
     const user = await User.findByIdAndUpdate(
       id,
-      { username: trimmedUsername, isActive },
+      { username: trimmedUsername, isActive, role },
       { new: true, runValidators: true }
     ).select('-password');
 

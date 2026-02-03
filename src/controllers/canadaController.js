@@ -1,26 +1,88 @@
 // backend/controllers/canadaController.js
 import mongoose from 'mongoose';
 import CanadaHBL from '../models/CanadaHBL.js';
+import CanadaVesselSchema from '../models/CanadaVessel.js';
+import CanadaPortSchema from '../models/CanadaPort.js';
 
 // Connect to different DB
 const canadaDB = mongoose.connection.useDb('canada_client'); // New DB name in same instance
 
 const HLManifest = canadaDB.model('HLManifest', CanadaHBL.schema); // Use model on new DB
+const CanadaVessel = canadaDB.model('CanadaVessel', CanadaVesselSchema); // New Vessel model for Canada
+const CanadaPort = canadaDB.model('CanadaPort', CanadaPortSchema); // New Port model for Canada
+
+// Vessel Management
+export const searchVessels = async (req, res) => {
+  try {
+    const { query } = req.query;
+    const vessels = await CanadaVessel.find({
+      $or: [
+        { name: { $regex: query, $options: 'i' } },
+        { code: { $regex: query, $options: 'i' } }
+      ]
+    }).limit(10);
+    res.json({ success: true, data: vessels });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+export const createVessel = async (req, res) => {
+  try {
+    const { name, code } = req.body;
+    const newVessel = await CanadaVessel.create({ name, code });
+    res.status(201).json({ success: true, data: newVessel });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// Port Management
+export const searchPorts = async (req, res) => {
+  try {
+    const { query } = req.query;
+    const ports = await CanadaPort.find({
+      $or: [
+        { name: { $regex: query, $options: 'i' } },
+        { code: { $regex: query, $options: 'i' } }
+      ]
+    }).limit(10);
+    res.json({ success: true, data: ports });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+export const createPort = async (req, res) => {
+  try {
+    const { name, code } = req.body;
+    const newPort = await CanadaPort.create({ name, code });
+    res.status(201).json({ success: true, data: newPort });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
 
 // Create new manifest
 export const createManifest = async (req, res) => {
   try {
     const { hbls } = req.body;
 
+    if (!hbls || !Array.isArray(hbls)) {
+      return res.status(400).json({ success: false, message: 'Invalid manifest data: hbls array is required' });
+    }
+
     // Calculate totals
     let totalWeight = 0;
     let totalCBM = 0;
 
     hbls.forEach(hbl => {
-      hbl.references.forEach(ref => {
-        totalWeight += ref.weight || 0;
-        totalCBM += ref.cbm || 0;
-      });
+      if (hbl.references && Array.isArray(hbl.references)) {
+        hbl.references.forEach(ref => {
+          totalWeight += Number(ref.weight) || 0;
+          totalCBM += Number(ref.cbm) || 0;
+        });
+      }
     });
 
     const newManifest = await HLManifest.create({
@@ -31,7 +93,8 @@ export const createManifest = async (req, res) => {
 
     res.status(201).json({ success: true, data: newManifest });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error('Create Manifest Error:', err);
+    res.status(500).json({ success: false, message: 'Backend Error: ' + err.message });
   }
 };
 

@@ -32,38 +32,15 @@ import statsRoutes from './routes/statsRoutes.js';
 const app = express();
 
 /* ============================
-   ✅ CORS CONFIG (FIXED)
+   ✅ CORS (FINAL FIX)
 ============================ */
-
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:5173',
-  'https://leafy-lebkuchen-d01b7a.netlify.app'
-];
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // allow REST tools (Postman, curl) with no origin
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(
-          new Error(`CORS blocked for origin: ${origin}`),
-          false
-        );
-      }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: true,        // reflect request origin
+    credentials: true,   // allow cookies
   })
 );
-
-// IMPORTANT: allow preflight requests
-app.options('*', cors());
 
 /* ============================
    MIDDLEWARE

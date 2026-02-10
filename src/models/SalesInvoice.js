@@ -29,6 +29,7 @@ const salesInvoiceSchema = new mongoose.Schema({
   currency: String,
   payMode: { type: String, enum: ['Cash', 'Credit'], default: 'Credit' },
   userType: { type: String, enum: ['Shipper', 'Consignee', 'Other'], default: 'Consignee' },
+  invoiceType: { type: String, enum: ['Invoice', 'Debit Note', 'Miscellaneous'], default: 'Invoice' },
   invoiceDate: { type: Date, required: true },
 
   jobId: { type: mongoose.Schema.Types.ObjectId, ref: 'SeaImportJob', required: true },

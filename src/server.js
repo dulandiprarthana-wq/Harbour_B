@@ -31,11 +31,14 @@ import exportJobRoutes from './routes/exportJobRoutes.js';
 import canadaRoutes from './routes/canadaRoutes.js';
 import statsRoutes from './routes/statsRoutes.js';
 
+import airImportJobRoutes from './routes/airImportJobRoutes.js';
+import airWaybillRoutes from './routes/airWaybillRoutes.js';
+
 const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173','http://localhost:3000','http://localhost:3000/', 'https://leafy-lebkuchen-d01b7a.netlify.app', 'https://leafy-lebkuchen-d01b7a.netlify.app/', 'https://transcorp-canada.netlify.app', 'https://transcorp-canada.netlify.app/',],
+  origin: ['http://localhost:5173','http://http://localhost:3000/' , 'https://leafy-lebkuchen-d01b7a.netlify.app', 'https://leafy-lebkuchen-d01b7a.netlify.app/'],
   credentials: true
 }));
 app.use(express.json());
@@ -69,12 +72,26 @@ app.use('/api/sales-invoices', salesInvoiceRoutes);
 app.use('/api/canada', canadaRoutes);
 app.use('/api/stats', statsRoutes);
 
+app.use('/api/jobs/air-import', airImportJobRoutes);
+app.use('/api/air-waybill', airWaybillRoutes);
+
+// NEW: Serve Reports Statically
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use('/reports', express.static(path.join(__dirname, '../public/reports')));
+
+// NEW: Report Routes
+import reportRoutes from './routes/reportRoutes.js';
+app.use('/api/reports', reportRoutes);
+
 // DB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB Connected');
-    app.listen(process.env.PORT || 5000, () => {
-      console.log(`Server running on port ${process.env.PORT || 5000}`);
+    app.listen(process.env.PORT || 80, () => {
+      console.log(`Server running on port ${process.env.PORT || 80}`);
     });
   })
   .catch(err => {

@@ -38,7 +38,7 @@ Comprehensive CRUD endpoints for system configuration:
 ## 📡 API Endpoints
 
 | Category | Endpoint | Description |
-|----------|----------|-------------|
+|-----------|-----------|--------------|
 | **Auth** | `/api/auth` | Login and Registration |
 | **Users** | `/api/users` | User administration |
 | **Partners** | `/api/customersuppliers` | Customers & Suppliers |

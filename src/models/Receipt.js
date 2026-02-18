@@ -4,15 +4,20 @@ import mongoose from 'mongoose';
 const receiptSchema = new mongoose.Schema({
   invoiceId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Invoice', // ← Make sure this matches your actual Invoice model name
-    required: [true, 'Invoice reference is required'],
-    index: true // Faster lookups when viewing receipts per invoice
+    refPath: 'itemModel',
+    required: [true, 'Reference is required'],
+    index: true
   },
-
+  itemModel: {
+    type: String,
+    required: true,
+    enum: ['SalesInvoice', 'Payable'],
+    default: 'SalesInvoice'
+  },
   invoiceType: {
     type: String,
-    required: [true, 'Invoice type is required'],
-    enum: ['Invoice', 'Debit Note', 'Credit Note', 'Other'], // ← Add realistic enum values
+    required: [true, 'Type is required'],
+    enum: ['Invoice', 'Debit Note', 'Credit Note', 'Payable', 'Other'],
     trim: true
   },
 

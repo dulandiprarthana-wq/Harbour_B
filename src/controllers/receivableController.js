@@ -10,13 +10,11 @@ const generateReceiptNo = async () => {
 
 export const createReceipt = async (req, res) => {
   try {
-    const { invoiceId, invoiceType, paidAmount, pendingAmount, date } = req.body;
+    const { invoiceId, invoiceType, itemModel, paidAmount, pendingAmount, date, notes } = req.body;
 
-    // Date validation (no past dates)
-    const today = new Date().setHours(0, 0, 0, 0);
-    const submitted = new Date(date).setHours(0, 0, 0, 0);
-    if (submitted < today) {
-      return res.status(400).json({ success: false, message: 'Date cannot be in the past' });
+    // Basic Validation
+    if (!invoiceId || !invoiceType || !paidAmount || !date) {
+      return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
 
     const receiptNo = await generateReceiptNo();
@@ -24,10 +22,13 @@ export const createReceipt = async (req, res) => {
     const newReceipt = await Receipt.create({
       invoiceId,
       invoiceType,
+      itemModel: itemModel || 'SalesInvoice',
       receiptNo,
       paidAmount: Number(paidAmount),
-      pendingAmount: Number(pendingAmount),
-      date: new Date(date)
+      pendingAmount: Number(pendingAmount) || 0,
+      date: new Date(date),
+      notes,
+      createdBy: req.user?._id
     });
 
     res.status(201).json({ success: true, data: newReceipt });

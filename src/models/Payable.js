@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 const chargeSchema = new mongoose.Schema({
   description: { type: String, required: true, trim: true },
   amount: { type: Number, required: true, min: 0 },
+  units: { type: Number, default: 1 },
   currency: { type: String, required: true }
 }, { _id: false });
 

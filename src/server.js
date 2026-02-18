@@ -3,9 +3,30 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 dotenv.config();
 
-// Import routes
+const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/* =====================================================
+   CORS CONFIG (FIXED)
+===================================================== */
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://leafy-lebkuchen-d01b7a.netlify.app'
+  ],
+  credentials: true
+}));
+
+app.use(express.json());
+app.use(cookieParser());
+
 import authRoutes from './routes/authRoutes.js';
 import customerSupplierRoutes from './routes/CustomerSupplier.js';
 import currencyRoutes from './routes/currency.js';
@@ -26,9 +47,6 @@ import userRoutes from './routes/userRoutes.js';
 import deliveryOrderRoutes from './routes/deliveryOrderRoutes.js';
 import salesInvoiceRoutes from './routes/salesInvoiceRoutes.js';
 
-// NEW: Export routes
-import exportJobRoutes from './routes/exportJobRoutes.js';
-
 import canadaRoutes from './routes/canadaRoutes.js';
 import statsRoutes from './routes/statsRoutes.js';
 
@@ -38,20 +56,11 @@ import receivableRoutes from './routes/receivableRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import payableRoutes from './routes/payable.js';
 
-const app = express();
-
-// Middleware
-app.use(cors({
-  origin: ['http://localhost:5173','http://http://localhost:3000/' , 'https://leafy-lebkuchen-d01b7a.netlify.app', 'https://leafy-lebkuchen-d01b7a.netlify.app/'],
-  credentials: true
-}));
-app.use(express.json());
-app.use(cookieParser());
-
-
-// Routes
+/* =====================================================
+   ROUTE MOUNTING
+===================================================== */
 app.use('/api/auth', authRoutes);
-app.use('/api/customersuppliers', customerSupplierRoutes); 
+app.use('/api/customersuppliers', customerSupplierRoutes);
 app.use('/api/currencies', currencyRoutes);
 app.use('/api/uoms', uomRoutes);
 app.use('/api/banks', bankRoutes);
@@ -64,8 +73,6 @@ app.use('/api/sea-destinations', seaDestinationRoutes);
 app.use('/api/air-destinations', airDestinationRoutes);
 
 app.use('/api/jobs/sea-import', seaImportJobRoutes);
-
-// NEW: Export jobs route
 app.use('/api/jobs/sea-export', exportJobRoutes);
 
 app.use('/api/users', userRoutes);
@@ -82,23 +89,22 @@ app.use('/api/receivables', receivableRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/payables', payableRoutes);
 
-// NEW: Serve Reports Statically
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+/* =====================================================
+   STATIC REPORTS FOLDER
+===================================================== */
 app.use('/reports', express.static(path.join(__dirname, '../public/reports')));
 
-// NEW: Report Routes
-import reportRoutes from './routes/reportRoutes.js';
-app.use('/api/reports', reportRoutes);
-
-// DB Connection
+/* =====================================================
+   DATABASE CONNECTION
+===================================================== */
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB Connected');
-    app.listen(process.env.PORT || 80, () => {
-      console.log(`Server running on port ${process.env.PORT || 80}`);
+
+    const PORT = process.env.PORT || 5000;
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch(err => {

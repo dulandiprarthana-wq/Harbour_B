@@ -19,7 +19,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'http://localhost:3000',
-    'https://leafy-lebkuchen-d01b7a.netlify.app'
+    'https://leafy-lebkuchen-d01b7a.netlify.app',
+    'https://transcorp-canada.netlify.app/'
   ],
   credentials: true
 }));

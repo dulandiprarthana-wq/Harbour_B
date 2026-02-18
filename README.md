@@ -31,9 +31,20 @@ Comprehensive CRUD endpoints for system configuration:
 ### 🚢 Freight Operations
 - **Asset Management**: Databases for Vessels and Flights.
 - **Route Configuration**: Sea and Air destination management.
-- **Import Jobs**: Full lifecycle management for Sea Import jobs.
+- **Import Jobs**: Full lifecycle management for **Sea Import** and **Air Import** jobs.
+- **Export Jobs**: Dedicated module for outbound freight management.
 - **Documentation Support**: Integrated data endpoints for dynamic **Sales Invoices** and **Manifest Reports**, including complex vessel/voyage lookups and HBL/MBL grouping.
 - **DO Management**: Generation and retrieval of Delivery Orders.
+
+### 🇨🇦 Canada Manifest (Specialized Module)
+- **Multi-DB Integration**: Dedicated data isolation for Canada-specific compliance.
+- **HBL & Reference Tracking**: Granular tracking of weights, CBM, and package counts.
+- **Automated Calculations**: Real-time recalculation of manifest totals upon HBL updates.
+
+### 📊 Dashboard & Stats
+- **Global Overview**: Aggregated metrics across Sea, Air, and Canada operations.
+- **Financial Insights**: Revenue tracking and outstanding invoice monitoring.
+- **Trend Analysis**: Statistical data for job distribution and monthly growth.
 
 ## 📡 API Endpoints
 
@@ -50,8 +61,14 @@ Comprehensive CRUD endpoints for system configuration:
 | **Freight** | `/api/flights` | Air Flights |
 | **Routes** | `/api/sea-destinations` | Sea Ports |
 | **Routes** | `/api/air-destinations` | Airports |
-| **Ops** | `/api/jobs/sea-import` | Sea Import Jobs |
-| **Ops** | `/api/delivery-orders` | Delivery Orders |
+| **Ops (Sea)** | `/api/jobs/sea-import` | Sea Import Jobs |
+| **Ops (Air)** | `/api/jobs/air-import` | Air Import Jobs |
+| **Ops (Export)**| `/api/jobs/export` | Export Jobs |
+| **Docs** | `/api/delivery-orders` | Delivery Orders |
+| **Docs** | `/api/air-waybills` | Air Waybills |
+| **Canada** | `/api/canada/manifests` | Canada Manifest management |
+| **Stats** | `/api/stats/dashboard` | Main dashboard metrics |
+| **Stats** | `/api/stats/canada` | Canada-specific analytics |
 
 ## 🛠️ Installation & Setup
 

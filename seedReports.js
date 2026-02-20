@@ -33,10 +33,7 @@ const reports = [
   {
     name: 'Delivery Order Format',
     code: 'DELIVERY_ORDER_FORMAT',
-    filename: 'format/index.html', // Accessing the index, but DO report uses React. 
-    // Wait, DO report uses React but images are in 'format/bgimg'.
-    // We might not need a report entry for DO if we just use the static URL for images.
-    // But let's add it for consistency if needed.
+    filename: 'format/index.html', 
     description: 'Delivery Order Format Base'
   }
 ];

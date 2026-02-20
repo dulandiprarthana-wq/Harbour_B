@@ -107,8 +107,8 @@ const deliveryOrderSchema = new mongoose.Schema({
   description: String,
   grossWeight: Number,
   cbm: Number,
-  blType: { type: String, enum: ['House BL', 'Master BL'], required: true },
-  commodity: String,
+  blType: { type: String, enum: ['House BL', 'Master BL'], default: 'House BL' },
+  commodity: { type: String, default: 'General Cargo' },
   freightTerm: String,
   hblTerm: String,
   rateFom: String,
@@ -164,6 +164,15 @@ deliveryOrderSchema.pre('save', function(next) {
       this[field] = undefined;
     }
   });
+
+  // Clean empty strings in containerDetails to avoid enum validation errors
+  if (this.containerDetails && Array.isArray(this.containerDetails)) {
+    this.containerDetails.forEach(detail => {
+      if (detail.fclType === '') {
+        detail.fclType = undefined;
+      }
+    });
+  }
 
   next();
 });

@@ -22,8 +22,8 @@ app.use(cors({
   origin: [
     'http://localhost:5174',
     'http://localhost:5174/',
-    'https://leafy-lebkuchen-d01b7a.netlify.app/',
-    'https://leafy-lebkuchen-d01b7a.netlify.app',
+    'https://harbourlinesfreight.netlify.app',
+    'https://harbourlinesfreight.netlify.app/',
     'https://transcorp-canada.netlify.app'
   ],
   credentials: true

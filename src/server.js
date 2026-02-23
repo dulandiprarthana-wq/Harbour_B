@@ -20,8 +20,8 @@ const __dirname = path.dirname(__filename);
 // Middleware
 app.use(cors({
   origin: [
-    'http://localhost:5174',
-    'http://localhost:5174/',
+    'http://localhost:5173',
+    'http://localhost:5173/',
     'https://harbourlinesfreight.netlify.app',
     'https://harbourlinesfreight.netlify.app/',
     'https://transcorp-canada.netlify.app'

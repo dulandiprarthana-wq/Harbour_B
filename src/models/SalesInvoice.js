@@ -63,6 +63,8 @@ const salesInvoiceSchema = new mongoose.Schema({
   // Bank Info
   bankCode: String,
   bankName: String,
+  branchCode: String,
+  swiftCode: String,
   accountName: String,
   accountAddress: String,
   accountStreet: String,
@@ -77,12 +79,33 @@ const salesInvoiceSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Auto-generate Invoice No
-salesInvoiceSchema.pre('save', async function(next) {
-  if (!this.invoiceNo) {
+salesInvoiceSchema.pre('validate', async function(next) {
+  if (this.isNew && (!this.invoiceNo || this.invoiceNo === '[AUTO-GENERATED]')) {
     const year = new Date().getFullYear().toString().slice(-2);
-    const count = await this.constructor.countDocuments({ invoiceNo: new RegExp(`^SFI/DNUFL/${year}/`) });
-    const padded = String(count + 1).padStart(7, '0');
-    this.invoiceNo = `SFI/DNUFL/${year}/${padded}`;
+    const prefix = `SFI/DNUFL/${year}/`;
+    
+    try {
+      // Find the invoice with the highest sequence number for this prefix
+      const lastInvoice = await this.constructor.findOne(
+        { invoiceNo: new RegExp(`^${prefix}`) },
+        { invoiceNo: 1 },
+        { sort: { invoiceNo: -1 } }
+      );
+
+      let nextSeq = 1;
+      if (lastInvoice) {
+        const parts = lastInvoice.invoiceNo.split('/');
+        const lastSeq = parseInt(parts[parts.length - 1], 10);
+        if (!isNaN(lastSeq)) {
+          nextSeq = lastSeq + 1;
+        }
+      }
+
+      const padded = String(nextSeq).padStart(7, '0');
+      this.invoiceNo = `${prefix}${padded}`;
+    } catch (err) {
+      console.error('Error generating invoice number:', err);
+    }
   }
   next();
 });

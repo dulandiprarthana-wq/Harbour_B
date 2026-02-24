@@ -520,7 +520,7 @@
 						if (invoice.invoiceLines && invoice.invoiceLines.length > 0) {
 							const container = document.getElementById('invoice-lines-container');
 							container.innerHTML = '';
-							let baseTop = 26.5; // Estimated top for first line
+							let baseTop = 27.0; // Estimated top for first line
 							let lineHeigh = 1.0; // Alignment spacing
 
 							invoice.invoiceLines.forEach((line, index) => {
@@ -530,10 +530,10 @@
 								
 								const lineHtml = `
 									<div class="pdf24_01" style="left:3.1917em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.chargeName || ''}</span></div>
-									<div class="pdf24_01" style="left:23.9583em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.amount || '0'}</span></div>
-									<div class="pdf24_01" style="left:30.5374em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.rate?.toFixed(2) || '0.00'}</span><span class="pdf24_15 pdf24_08 pdf24_11" style="margin-left: 0.5em;">${line.currency || ''}</span></div>
-									<div class="pdf24_01" style="left:37.8579em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.exRate?.toFixed(2) || '1.00'}</span></div>
-									<div class="pdf24_01" style="left:44.8131em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${lineValue.toLocaleString('en-LK', { minimumFractionDigits: 2 })}</span></div>
+									<div class="pdf24_01" style="left:24.9583em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.amount || '0'}</span></div>
+									<div class="pdf24_01" style="left:31.5374em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.rate?.toFixed(2) || '0.00'}</span><span class="pdf24_15 pdf24_08 pdf24_11" style="margin-left: 0.5em;">${line.currency || ''}</span></div>
+									<div class="pdf24_01" style="left:38.8579em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.exRate?.toFixed(2) || '1.00'}</span></div>
+									<div class="pdf24_01" style="left:45.3131em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${lineValue.toLocaleString('en-LK', { minimumFractionDigits: 2 })}</span></div>
 								`;
 								container.insertAdjacentHTML('beforeend', lineHtml);
 							});

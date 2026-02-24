@@ -6,9 +6,11 @@ import {
   getSalesInvoice
 } from '../controllers/salesInvoiceController.js';
 
+import { protect } from '../middleware/auth.js';
+
 const router = express.Router();
 
-router.post('/createInvoice', createSalesInvoice);
+router.post('/createInvoice', protect, createSalesInvoice);
 router.get('/getAllInvoices', getAllSalesInvoices);
 router.get('/getInvoice/:id', getSalesInvoice);
 

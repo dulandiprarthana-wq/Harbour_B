@@ -75,6 +75,7 @@ const salesInvoiceSchema = new mongoose.Schema({
 
   // Totals
   totalAmount: Number,
+  createdBy: String,
   status: { type: String, enum: ['Active', 'Inactive'], default: 'Active' }
 }, { timestamps: true });
 

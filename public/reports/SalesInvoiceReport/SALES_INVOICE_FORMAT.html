@@ -520,8 +520,8 @@
 						if (invoice.invoiceLines && invoice.invoiceLines.length > 0) {
 							const container = document.getElementById('invoice-lines-container');
 							container.innerHTML = '';
-							let baseTop = 27.0; // Estimated top for first line
-							let lineHeigh = 1.0; // Alignment spacing
+							let baseTop = 26.5; // Estimated top for first line
+							let lineHeigh = 0.9; // Alignment spacing
 
 							invoice.invoiceLines.forEach((line, index) => {
 								const currentTop = baseTop + (index * lineHeigh);

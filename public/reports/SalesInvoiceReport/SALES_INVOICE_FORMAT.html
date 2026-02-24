@@ -419,7 +419,7 @@
 					<div class="pdf24_01" style="left:44.9339em;top:30.3054em;"><span id="val-netValue" class="pdf24_10 pdf24_08 pdf24_11"></span></div>
 					<div class="pdf24_01" style="left:46.7006em;top:31.3929em;"><span id="val-advanceValue" class="pdf24_10 pdf24_08 pdf24_21">0.00 &nbsp;</span></div>
 					<div class="pdf24_01" style="left:36.2333em;top:31.3971em;"><span class="pdf24_10 pdf24_08 pdf24_21" style="word-spacing:0.0004em;">Advance Value &nbsp;</span></div>
-					<div class="pdf24_01" style="left:33.4583em;top:33.4221em;"><span class="pdf24_10 pdf24_08 pdf24_11" style="word-spacing:0.0521em;">Receivable Value LKR &nbsp;</span></div>
+					<div class="pdf24_01" style="left:33.4583em;top:33.4221em;"><span class="pdf24_10 pdf24_08 pdf24_11" style="word-spacing:0.0521em;">Receivable Value <span id="lbl-receivableCurrency"></span></span></div>
 					<div class="pdf24_01" style="left:44.9339em;top:33.4221em;"><span id="val-receivableValue" class="pdf24_10 pdf24_08 pdf24_11"></span></div>
 					<div class="pdf24_01" style="left:2.7083em;top:35.0262em;z-index:439;"><span id="val-amountInWords" class="pdf24_15 pdf24_08 pdf24_25" style="word-spacing:0.0097em;"></span></div>
 					<div class="pdf24_01" style="left:2.7083em;top:36.0721em;"><span class="pdf24_15 pdf24_08 pdf24_27" style="word-spacing:0.0017em;">Remarks : &nbsp;</span></div>
@@ -531,7 +531,7 @@
 								const lineHtml = `
 									<div class="pdf24_01" style="left:3.1917em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.chargeName || ''}</span></div>
 									<div class="pdf24_01" style="left:24.9583em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.amount || '0'}</span></div>
-									<div class="pdf24_01" style="left:31.5374em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.rate?.toFixed(2) || '0.00'}</span><span class="pdf24_15 pdf24_08 pdf24_11" style="margin-left: 0.5em;">${line.currency || ''}</span></div>
+									<div class="pdf24_01" style="left:31.5374em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.rate?.toFixed(2) || '0.00'}</span><span class="pdf24_15 pdf24_08 pdf24_11" style="margin-left: 1.25em;">${line.currency || ''}</span></div>
 									<div class="pdf24_01" style="left:38.8579em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${line.exRate?.toFixed(2) || '1.00'}</span></div>
 									<div class="pdf24_01" style="left:45.3131em;top:${currentTop}em;"><span class="pdf24_15 pdf24_08 pdf24_11">${lineValue.toLocaleString('en-LK', { minimumFractionDigits: 2 })}</span></div>
 								`;
@@ -543,6 +543,7 @@
 						document.getElementById('val-totalValue').innerText = calculatedTotal.toLocaleString('en-LK', { minimumFractionDigits: 2 });
 						document.getElementById('val-netValue').innerText = calculatedTotal.toLocaleString('en-LK', { minimumFractionDigits: 2 });
 						document.getElementById('val-receivableValue').innerText = calculatedTotal.toLocaleString('en-LK', { minimumFractionDigits: 2 });
+						document.getElementById('lbl-receivableCurrency').innerText = invoice.currency || 'LKR';
 						
 						// Amount in words
 						document.getElementById('val-amountInWords').innerText = numberToWords(calculatedTotal) + ' ONLY.';
